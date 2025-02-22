@@ -5,6 +5,7 @@ click==8.1.8
 event_core @ git+https://github.com/axwhyzee/multi-modal-retrieval-event-core.git
 Flask==3.1.0
 Flask-Cors==5.0.0
+gunicorn==23.0.0
 idna==3.10
 iniconfig==2.0.0
 itsdangerous==2.2.0

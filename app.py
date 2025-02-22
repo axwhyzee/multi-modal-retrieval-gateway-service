@@ -44,4 +44,4 @@ def object_get(obj_path: str):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    app.run(port=5004)
+    app.run(port=5000)
