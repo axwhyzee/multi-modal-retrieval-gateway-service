@@ -28,7 +28,9 @@ def add():
 def query_text():
     user: str = request.args["user"]
     text: str = request.args["text"]
-    return handle_query_text(user, text, n_cands=20, n_rank=4)
+    n_cands: int = request.args.get("n_cands", 20)
+    n_rank: int = request.args.get("n_rank", 4)
+    return handle_query_text(user, text, n_cands, n_rank)
 
 
 @app.route("/object/get/<path:obj_path>", methods=["GET"])
