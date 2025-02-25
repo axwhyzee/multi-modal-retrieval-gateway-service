@@ -13,8 +13,10 @@ def handle_add(data: bytes, file_name: str, user: str) -> None:
     add(data, key, key, ObjectType.DOC)
 
 
-def handle_query_text(user: str, text: str) -> Dict[str, List[str]]:
-    return query_text(user, text)
+def handle_query_text(
+    user: str, text: str, n_cands: int, n_rank: int
+) -> Dict[str, List[str]]:
+    return query_text(user, text, n_cands, n_rank)
 
 
 def handle_object_get(obj_path: str) -> bytes:
