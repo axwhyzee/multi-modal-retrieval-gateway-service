@@ -1,5 +1,5 @@
 import hashlib
-from typing import List
+from typing import Dict, List
 
 from event_core.adapters.services.api.embedding import query_text
 from event_core.adapters.services.api.storage import add, get
@@ -13,7 +13,7 @@ def handle_add(data: bytes, file_name: str, user: str) -> None:
     add(data, key, key, ObjectType.DOC)
 
 
-def handle_query_text(user: str, text: str) -> List[str]:
+def handle_query_text(user: str, text: str) -> Dict[str, List[str]]:
     return query_text(user, text)
 
 
