@@ -6,11 +6,8 @@ from event_core.domain.types import FileExt
 from flask import Flask, request, send_file
 from flask_cors import CORS
 
+from bootstrap import bootstrap
 from handlers import handle_add, handle_object_get, handle_query_text
-
-
-def _file_ext_from_key(key: str) -> FileExt:
-    return cast(FileExt, FileExt._value2member_map_[key])
 
 
 app = Flask(__name__)
@@ -52,4 +49,5 @@ def object_get(obj_path: str):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
+    bootstrap()
     app.run(port=5004)
