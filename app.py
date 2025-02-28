@@ -2,10 +2,16 @@ import logging
 from io import BytesIO
 
 from event_core.adapters.services.exceptions import ObjectNotExists
+from event_core.domain.types import FileExt
 from flask import Flask, request, send_file
 from flask_cors import CORS
 
 from handlers import handle_add, handle_object_get, handle_query_text
+
+
+def _file_ext_from_key(key: str) -> FileExt:
+    return cast(FileExt, FileExt._value2member_map_[key])
+
 
 app = Flask(__name__)
 CORS(app)
@@ -29,7 +35,7 @@ def query_text():
     user: str = request.args["user"]
     text: str = request.args["text"]
     n_cands = int(request.args.get("n_cands", 20))
-    n_rank= int(request.args.get("n_rank", 4))
+    n_rank = int(request.args.get("n_rank", 4))
     return handle_query_text(user, text, n_cands, n_rank)
 
 
