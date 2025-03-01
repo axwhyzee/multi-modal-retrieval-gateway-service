@@ -7,8 +7,7 @@ from flask_cors import CORS
 from bootstrap import bootstrap
 from handlers import handle_add, handle_object_get, handle_query_text
 
-app = Flask(__name__)
-CORS(app)
+app: Flask
 
 
 @app.route("/add", methods=["POST"])
@@ -43,7 +42,16 @@ def object_get(obj_path: str):
     )
 
 
-if __name__ == "__main__":
+def create_app():
     logging.basicConfig(level=logging.INFO)
+    app = Flask(__name__)
+    CORS(app)
     bootstrap()
+    return app
+
+
+app = create_app()
+
+
+if __name__ == "__main__":
     app.run(port=5004)
