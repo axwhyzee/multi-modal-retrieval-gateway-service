@@ -7,7 +7,16 @@ from flask_cors import CORS
 from bootstrap import bootstrap
 from handlers import handle_add, handle_object_get, handle_query_text
 
-app: Flask
+
+def create_app():
+    logging.basicConfig(level=logging.INFO)
+    app = Flask(__name__)
+    CORS(app)
+    bootstrap()
+    return app
+
+
+app = create_app()
 
 
 @app.route("/add", methods=["POST"])
@@ -40,17 +49,6 @@ def object_get(obj_path: str):
     return send_file(
         BytesIO(obj_data), download_name=obj_path, as_attachment=True
     )
-
-
-def create_app():
-    logging.basicConfig(level=logging.INFO)
-    app = Flask(__name__)
-    CORS(app)
-    bootstrap()
-    return app
-
-
-app = create_app()
 
 
 if __name__ == "__main__":
