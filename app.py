@@ -1,14 +1,11 @@
 import logging
 from io import BytesIO
 
-from event_core.adapters.services.exceptions import ObjectNotExists
-from event_core.domain.types import FileExt
 from flask import Flask, request, send_file
 from flask_cors import CORS
 
 from bootstrap import bootstrap
 from handlers import handle_add, handle_object_get, handle_query_text
-
 
 app = Flask(__name__)
 CORS(app)
@@ -22,26 +19,25 @@ def add():
         return "`user` required", 400
 
     file = request.files["file"]
-    user: str = request.form["user"]
+    user = request.form["user"]
     handle_add(file.read(), file.filename, user)
     return "Success", 200
 
 
 @app.route("/query/text", methods=["GET"])
 def query_text():
-    user: str = request.args["user"]
-    text: str = request.args["text"]
-    n_cands = int(request.args.get("n_cands", 20))
-    n_rank = int(request.args.get("n_rank", 4))
-    return handle_query_text(user, text, n_cands, n_rank)
+    user = request.args["user"]
+    text = request.args["text"]
+    top_n = int(request.args.get("top_n", 5))
+    return handle_query_text(user, text, top_n)
 
 
-@app.route("/object/get/<path:obj_path>", methods=["GET"])
+@app.route("/get/<path:obj_path>", methods=["GET"])
 def object_get(obj_path: str):
     try:
         obj_data = handle_object_get(obj_path)
-    except ObjectNotExists as e:
-        return e, 404
+    except KeyError as e:
+        return str(e), 404
     return send_file(
         BytesIO(obj_data), download_name=obj_path, as_attachment=True
     )
