@@ -77,20 +77,17 @@ def handle_query_text(
             # for video chunks, return chunk's thumbnail instead
             if modal == Modal.VIDEO:
                 chunk_key = meta[Meta.CHUNK_THUMB][chunk_key]
-
             doc_chunks[doc_key].append(chunk_key)
 
-        for doc_key, chunk_keys in doc_chunks.items():
-            doc_filename = meta[Meta.FILENAME][doc_key]
-            doc_thumb_key = meta[Meta.DOC_THUMB][doc_key]
-            res[modal].append(
-                {
-                    "doc_key": doc_key,
-                    "doc_thumb_key": doc_thumb_key,
-                    "doc_filename": doc_filename,
-                    "chunk_keys": chunk_keys,
-                }
-            )
+        res[modal] = [
+            {
+                "doc_key": doc_key,
+                "doc_thumb_key": meta[Meta.DOC_THUMB][doc_key],
+                "doc_filename": meta[Meta.FILENAME][doc_key],
+                "chunk_keys": chunk_keys,
+            }
+            for doc_key, chunk_keys in doc_chunks.items()
+        ]
     return res
 
 
