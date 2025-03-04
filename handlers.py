@@ -1,6 +1,6 @@
 import hashlib
 from collections import defaultdict
-from typing import Dict, List, TypeAlias, Union, cast
+from typing import Dict, List, TypeAlias, Union
 
 from dependency_injector.wiring import Provide, inject
 from event_core.adapters.services.embedding import (
@@ -9,7 +9,12 @@ from event_core.adapters.services.embedding import (
 )
 from event_core.adapters.services.meta import AbstractMetaMapping, Meta
 from event_core.adapters.services.storage import Payload, StorageClient
-from event_core.domain.types import FileExt, Modal, UnitType, path_to_ext, PRIMITIVE_EXT_TO_MODAL
+from event_core.domain.types import (
+    PRIMITIVE_EXT_TO_MODAL,
+    Modal,
+    UnitType,
+    path_to_ext,
+)
 
 from bootstrap import DIContainer
 
