@@ -10,7 +10,6 @@ from event_core.adapters.services.embedding import (
 from event_core.adapters.services.meta import AbstractMetaMapping, Meta
 from event_core.adapters.services.storage import Payload, StorageClient
 from event_core.domain.types import (
-    PRIMITIVE_EXT_TO_MODAL,
     Modal,
     UnitType,
     path_to_ext,
@@ -42,8 +41,7 @@ def handle_add(
     hash = _hash(file_name)
     file_ext = path_to_ext(file_name)
     key = f"{user}/{hash}{file_ext}"
-    modal = PRIMITIVE_EXT_TO_MODAL[file_ext]
-    storage[key] = Payload(data=data, obj_type=UnitType.DOC, modal=modal)
+    storage[key] = Payload(data=data, type=UnitType.DOC)
     meta[Meta.FILENAME][key] = file_name
 
 
@@ -92,7 +90,7 @@ def handle_query_text(
 
 
 @inject
-def handle_object_get(
+def handle_get(
     path: str,
     storage: StorageClient = Provide[DIContainer.storage],
 ) -> bytes:
