@@ -5,7 +5,7 @@ from flask import Flask, request, send_file
 from flask_cors import CORS
 
 from bootstrap import bootstrap
-from handlers import handle_add, handle_object_get, handle_query_text
+from handlers import handle_add, handle_get, handle_query_text
 
 
 def create_app():
@@ -40,14 +40,14 @@ def query_text():
     return handle_query_text(user, text, top_n)
 
 
-@app.route("/get/<path:obj_path>", methods=["GET"])
-def object_get(obj_path: str):
+@app.route("/get/<path:path>", methods=["GET"])
+def get(path: str):
     try:
-        obj_data = handle_object_get(obj_path)
+        data = handle_get(path)
     except KeyError as e:
         return str(e), 404
     return send_file(
-        BytesIO(obj_data), download_name=obj_path, as_attachment=True
+        BytesIO(data), download_name=path, as_attachment=True
     )
 
 
