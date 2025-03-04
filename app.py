@@ -46,7 +46,7 @@ def get(path: str):
         data = handle_get(path)
     except KeyError as e:
         return str(e), 404
-    return send_file(BytesIO(data), download_name=path, as_attachment=True)
+    return send_file(BytesIO(data), download_name=path, as_attachment=False)
 
 
 if __name__ == "__main__":
