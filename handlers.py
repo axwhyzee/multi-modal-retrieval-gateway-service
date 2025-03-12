@@ -6,7 +6,7 @@ from dependency_injector.wiring import Provide, inject
 from event_core.adapters.services.embedding import EmbeddingClient
 from event_core.adapters.services.meta import AbstractMetaMapping, Meta
 from event_core.adapters.services.storage import Payload, StorageClient
-from event_core.domain.types import EXT_TO_MODAL, Modal, UnitType, path_to_ext
+from event_core.domain.types import EXT_TO_MODAL, Asset, Modal, path_to_ext
 
 from bootstrap import DIContainer
 
@@ -33,7 +33,7 @@ def handle_add(
     hash = _hash(file_name)
     file_ext = path_to_ext(file_name)
     key = f"{user}/{hash}{file_ext}"
-    storage[key] = Payload(data=data, type=UnitType.DOC)
+    storage[key] = Payload(data=data, type=Asset.DOC)
     meta[Meta.FILENAME][key] = file_name
 
 
@@ -85,3 +85,10 @@ def handle_get(
     storage: StorageClient = Provide[DIContainer.storage],
 ) -> bytes:
     return storage[path]
+
+
+@inject
+def handle_list(
+    storage: StorageClient = Provide[DIContainer.storage],
+) -> List[str]:
+    return list(storage)

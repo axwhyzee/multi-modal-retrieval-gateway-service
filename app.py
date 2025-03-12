@@ -5,7 +5,7 @@ from flask import Flask, request, send_file
 from flask_cors import CORS
 
 from bootstrap import bootstrap
-from handlers import handle_add, handle_get, handle_query_text
+from handlers import handle_add, handle_get, handle_list, handle_query_text
 
 
 def create_app():
@@ -47,6 +47,11 @@ def get(path: str):
     except KeyError as e:
         return str(e), 404
     return send_file(BytesIO(data), download_name=path, as_attachment=False)
+
+
+@app.route("/list", methods=["GET"])
+def list_objs():
+    return handle_list()
 
 
 if __name__ == "__main__":
