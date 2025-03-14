@@ -1,6 +1,6 @@
 import hashlib
 from collections import defaultdict
-from typing import Dict, List, TypeAlias, Union
+from typing import Any, Dict, List, TypeAlias
 
 from dependency_injector.wiring import Provide, inject
 from event_core.adapters.services.embedding import EmbeddingClient
@@ -10,7 +10,14 @@ from event_core.domain.types import EXT_TO_MODAL, Asset, Modal, path_to_ext
 
 from bootstrap import DIContainer
 
-DocT: TypeAlias = Dict[str, Union[str, List[str]]]
+DocT: TypeAlias = Dict[str, Any]
+
+
+ELEM_META = (
+    Meta.PAGE,
+    Meta.COORDS,
+    Meta.FRAME_SECONDS,
+)
 
 
 def _hash(s: str) -> str:
@@ -73,7 +80,17 @@ def handle_query_text(
             "doc_key": doc_key,
             "doc_thumb_key": meta[Meta.DOC_THUMB][doc_key],
             "doc_filename": meta[Meta.FILENAME][doc_key],
-            "chunk_keys": chunk_keys,
+            "chunks": [
+                {
+                    "meta": {
+                        meta[meta_key][chunk_key]
+                        for meta_key in ELEM_META
+                        if chunk_key in meta[meta_key]
+                    },
+                    "key": chunk_key,
+                }
+                for chunk_key in chunk_keys
+            ],
         }
         for doc_key, chunk_keys in docs.items()
     ]
