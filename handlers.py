@@ -83,7 +83,7 @@ def handle_query_text(
             "chunks": [
                 {
                     "meta": {
-                        meta[meta_key][chunk_key]
+                        meta_key: meta[meta_key][chunk_key]
                         for meta_key in ELEM_META
                         if chunk_key in meta[meta_key]
                     },
