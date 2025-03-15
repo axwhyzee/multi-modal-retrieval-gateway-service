@@ -6,7 +6,7 @@ from dependency_injector.wiring import Provide, inject
 from event_core.adapters.services.embedding import EmbeddingClient
 from event_core.adapters.services.meta import AbstractMetaMapping, Meta
 from event_core.adapters.services.storage import Payload, StorageClient
-from event_core.domain.types import EXT_TO_MODAL, Asset, Modal, path_to_ext
+from event_core.domain.types import Asset, path_to_ext, FileExt
 
 from bootstrap import DIContainer
 
@@ -17,6 +17,12 @@ ELEM_META = (
     Meta.PAGE,
     Meta.COORDS,
     Meta.FRAME_SECONDS,
+)
+
+IMG_EXTS = (
+    FileExt.JPEG,
+    FileExt.JPG,
+    FileExt.PDF,
 )
 
 
@@ -68,10 +74,9 @@ def handle_query_text(
     for chunk_key in chunk_keys:
         doc_key = meta[Meta.PARENT][chunk_key]
         chunk_file_ext = path_to_ext(chunk_key)
-        chunk_modal = EXT_TO_MODAL[chunk_file_ext]
 
         # for images, return key of thumbnail instead
-        if chunk_modal == Modal.IMAGE:
+        if chunk_file_ext in IMG_EXTS:
             chunk_key = meta[Meta.CHUNK_THUMB][chunk_key]
         docs[doc_key].append(chunk_key)
 
