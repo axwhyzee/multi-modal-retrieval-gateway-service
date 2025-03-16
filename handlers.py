@@ -74,11 +74,6 @@ def handle_query_text(
 
     for chunk_key in chunk_keys:
         doc_key = meta[Meta.PARENT][chunk_key]
-        chunk_file_ext = path_to_ext(chunk_key)
-
-        # for images, return key of thumbnail instead
-        if chunk_file_ext in IMG_EXTS:
-            chunk_key = meta[Meta.CHUNK_THUMB][chunk_key]
         docs[doc_key].append(chunk_key)
 
     return [
@@ -93,12 +88,16 @@ def handle_query_text(
                         for meta_key in ELEM_META
                         if chunk_key in meta[meta_key]
                     },
-                    "key": chunk_key,
+                    "key": (
+                        meta[Meta.CHUNK_THUMB][chunk_key]
+                        if path_to_ext(chunk_key) in IMG_EXTS  # img thumb
+                        else chunk_key
+                    ),
                 }
-                for chunk_key in chunk_keys
+                for chunk_key in doc_chunk_keys
             ],
         }
-        for doc_key, chunk_keys in docs.items()
+        for doc_key, doc_chunk_keys in docs.items()
     ]
 
 
