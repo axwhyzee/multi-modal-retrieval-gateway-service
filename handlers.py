@@ -22,7 +22,7 @@ ELEM_META = (
 IMG_EXTS = (
     FileExt.JPEG,
     FileExt.JPG,
-    FileExt.PDF,
+    FileExt.PNG,
 )
 
 
