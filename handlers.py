@@ -1,12 +1,12 @@
 import hashlib
 from collections import defaultdict
-from typing import Any, Dict, List, TypeAlias
+from typing import Any, Dict, List, Optional, TypeAlias
 
 from dependency_injector.wiring import Provide, inject
 from event_core.adapters.services.embedding import EmbeddingClient
 from event_core.adapters.services.meta import AbstractMetaMapping, Meta
 from event_core.adapters.services.storage import Payload, StorageClient
-from event_core.domain.types import Asset, path_to_ext, FileExt
+from event_core.domain.types import Asset, FileExt, path_to_ext
 
 from bootstrap import DIContainer
 
@@ -55,6 +55,7 @@ def handle_query_text(
     user: str,
     text: str,
     top_n: int,
+    exclude_elems: Optional[List[str]] = None,
     embedder: EmbeddingClient = Provide[DIContainer.embedder],
     meta: AbstractMetaMapping = Provide[DIContainer.meta],
 ) -> List[DocT]:
@@ -68,7 +69,7 @@ def handle_query_text(
     3. Return a dictionary containing docs categorized by
        their associated modal
     """
-    chunk_keys = embedder.query_text(user, text, top_n)
+    chunk_keys = embedder.query_text(user, text, top_n, exclude_elems)
     docs: Dict[str, List[str]] = defaultdict(list)  # map docs to its chunks
 
     for chunk_key in chunk_keys:
@@ -88,7 +89,7 @@ def handle_query_text(
             "chunks": [
                 {
                     "meta": {
-                        meta_key: meta[meta_key][chunk_key]
+                        meta_key.value: meta[meta_key][chunk_key]
                         for meta_key in ELEM_META
                         if chunk_key in meta[meta_key]
                     },

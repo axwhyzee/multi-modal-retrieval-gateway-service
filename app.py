@@ -37,7 +37,8 @@ def query_text():
     user = request.args["user"]
     text = request.args["text"]
     top_n = int(request.args.get("top_n", 5))
-    return handle_query_text(user, text, top_n)
+    exclude_elems = request.args.get("exclude_elems")
+    return handle_query_text(user, text, top_n, exclude_elems)
 
 
 @app.route("/get/<path:path>", methods=["GET"])
