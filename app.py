@@ -25,10 +25,11 @@ def add():
         return "File required", 400
     if "user" not in request.form:
         return "`user` required", 400
-
+    
     file = request.files["file"]
     user = request.form["user"]
-    handle_add(file.read(), file.filename, user)
+    filename = request.form.get("filename", file.filename)
+    handle_add(file.read(), filename, user)
     return "Success", 200
 
 
